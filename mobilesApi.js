@@ -73,15 +73,15 @@ app.get("/svr/mobiles/filter", function (req, res) {
 
     if (brand) {
         condParams += condParams ? " AND" : "";
-        condParams += format(" brand = %L", brand);
+        condParams += format(" brand IN (%L)", brand.split(','));
     }
     if (ram) {
         condParams += condParams ? " AND" : "";
-        condParams += format(" ram = %L", ram);
+        condParams += format(" ram IN (%L)", ram.split(','));
     }
     if (rom) {
         condParams += condParams ? " AND" : "";
-        condParams += format(" rom = %L", rom);
+        condParams += format(" rom IN (%L)", rom.split(','));
     }
     if (os) {
         condParams += condParams ? " AND" : "";
@@ -110,6 +110,7 @@ app.get("/svr/mobiles/:name", function (req, response) {
 });
 
 app.get("/svr/mobiles/brand/:brand", function (req, response) {
+    console.log(req.body);
     let brand = req.params.brand;
     let sql = format("SELECT * FROM mobiles WHERE brand = %L", brand);
     client.query(sql, function (err, res) {
